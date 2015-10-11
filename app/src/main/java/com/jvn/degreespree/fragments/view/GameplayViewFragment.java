@@ -28,6 +28,7 @@ public class GameplayViewFragment extends Fragment {
 
     private Button mMove;
     private Button mShowBoard;
+    private Button mPlayCard;
     private ListView mMovableLocationLists;
     private ArrayAdapter<BoardPosition> movableLocations;
 
@@ -65,6 +66,7 @@ public class GameplayViewFragment extends Fragment {
         initShowBoardButton(v);
         initMoveButton(v);
         initMoveList(v);
+        initDrawCardButton(v);
     }
 
     private void initShowBoardButton(View v) {
@@ -85,9 +87,19 @@ public class GameplayViewFragment extends Fragment {
             public void onClick(View view) {
 
                 if (currentlySelected != null) {
-                    Log.d(TAG, "Move clicked");
                     controller.movePlayer(currentlySelected);
                 }
+            }
+        });
+    }
+
+    private void initDrawCardButton(View v) {
+        mPlayCard = (Button) v.findViewById(R.id.play_card);
+        mPlayCard.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // Do nothing for now
+                controller.playCard(null);
             }
         });
     }

@@ -132,9 +132,6 @@ public class BoardViewFragment extends Fragment {
     }
 
     public void addPlayer(Player player) {
-        if (this.getContext() == null) {
-            Log.d(TAG, "Null Player");
-        }
         PlayerIcon icon = new PlayerIcon(controller.getApplicationContext());
         icon.setup(player);
         playerIcons.put(player, icon);
