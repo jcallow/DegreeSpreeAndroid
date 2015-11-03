@@ -105,9 +105,10 @@
                         android:textSize="12dp"/>
 
                 <ImageView
+                    android:id="@+id/card_view"
                     android:layout_width="300dp"
                     android:layout_height="400dp"
-                    android:src="@drawable/meet_the_dean"
+
                     android:background="@drawable/text_box_border"
                     android:layout_gravity="bottom"/>
 

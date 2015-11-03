@@ -1,6 +1,8 @@
 package com.jvn.degreespree.fragments.view;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.media.Image;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -10,11 +12,13 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.ListView;
 
 import com.jvn.degreespree.R;
 import com.jvn.degreespree.controllers.GameController;
 import com.jvn.degreespree.models.BoardPosition;
+import com.jvn.degreespree.models.cards.Card;
 
 import java.util.ArrayList;
 
@@ -29,8 +33,13 @@ public class GameplayViewFragment extends Fragment {
     private Button mMove;
     private Button mShowBoard;
     private Button mPlayCard;
+    private Button mDrawCard;
+    private Button mDiscard;
+    private Button mNextCard;
     private ListView mMovableLocationLists;
     private ArrayAdapter<BoardPosition> movableLocations;
+    private ImageView mCardView;
+    private Integer currentCard = null;
 
     private BoardPosition currentlySelected = null;
 
@@ -67,6 +76,36 @@ public class GameplayViewFragment extends Fragment {
         initMoveButton(v);
         initMoveList(v);
         initDrawCardButton(v);
+        initCardDisplay(v);
+        initDrawCard(v);
+        initNextCard(v);
+    }
+
+    private void initDrawCard(View v) {
+        mDrawCard = (Button) v.findViewById(R.id.draw_card);
+
+        mDrawCard.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                controller.drawCard();
+            }
+        });
+    }
+
+    private void initDiscard() {
+
+    }
+
+    private void initNextCard(View v) {
+        mNextCard = (Button) v.findViewById(R.id.next_card);
+
+        mNextCard.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                controller.nextCard();
+            }
+        });
     }
 
     private void initShowBoardButton(View v) {
@@ -117,9 +156,25 @@ public class GameplayViewFragment extends Fragment {
         });
     }
 
+    private void initCardDisplay(View v) {
+        mCardView = (ImageView) v.findViewById(R.id.card_view);
+        if (currentCard != null) {
+            mCardView.setImageResource(currentCard);
+        }
+    }
+
     public void updateMovableLocation(ArrayList<BoardPosition> positions) {
         movableLocations.clear();
         movableLocations.addAll(positions);
         movableLocations.notifyDataSetChanged();
+    }
+
+    public void updateCardDisplay(Card card) {
+        currentCard = card.getImageRef();
+        // safety check.  Card could be updated while out of context.  Have to do this because I goofed
+        // the way I built the view.
+        if (mCardView != null) {
+            mCardView.setImageResource(card.getImageRef());
+        }
     }
 }

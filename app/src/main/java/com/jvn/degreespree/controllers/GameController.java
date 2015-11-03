@@ -4,12 +4,15 @@ import android.content.Context;
 import android.util.Log;
 
 import com.jvn.degreespree.MainView;
+import com.jvn.degreespree.R;
 import com.jvn.degreespree.Utils.ScreenUtils;
 import com.jvn.degreespree.fragments.view.BoardViewFragment;
 import com.jvn.degreespree.fragments.view.GameplayViewFragment;
 import com.jvn.degreespree.fragments.view.StartFragment;
 import com.jvn.degreespree.models.BoardPosition;
-import com.jvn.degreespree.models.Card;
+import com.jvn.degreespree.models.Deck;
+import com.jvn.degreespree.models.cards.CECS105;
+import com.jvn.degreespree.models.cards.Card;
 import com.jvn.degreespree.models.ComputerPlayer;
 import com.jvn.degreespree.models.GameBoard;
 import com.jvn.degreespree.models.GameSettings;
@@ -35,6 +38,7 @@ public class GameController {
     private Player currentPlayersTurn;
     private int currentPlayerIndex = 0;
     private GameBoard gameBoard;
+    private Deck deck;
 
     public GameController(MainView mainView) {
         this.mainView = mainView;
@@ -60,6 +64,7 @@ public class GameController {
 
     private void init() {
         gameBoard = new GameBoard();
+        deck = new Deck();
     }
 
     public void startGame() {
@@ -72,11 +77,17 @@ public class GameController {
         for (Player player : players) {
             player.setBoardPosition(gameBoard.getPosition(17));
             player.bind(this);
+            ArrayList<Card> crds = deck.take(5);
+            player.addToHand(crds);
+            if (player.isHuman()) {
+                menuView.updateCardDisplay(player.getCardInHand());
+            }
         }
 
         viewBoard();
 
         addPlayers(players);
+
 
         startTurn(players.get(currentPlayerIndex));
 
@@ -88,6 +99,7 @@ public class GameController {
 
     private void startTurn(Player player) {
         currentPlayersTurn = player;
+        currentPlayersTurn.addCardToHand(deck.drawCard());
         if (player.isHuman()) {
             player.startTurn();
             ArrayList<BoardPosition> positions = gameBoard.getPositions(player.getBoardPosition().getNearbyPositions());
@@ -138,10 +150,41 @@ public class GameController {
     }
 
     public void playCard(Card card) {
-        // At somepoint play the card yo
-
+        currentPlayersTurn.playCardInHand();
+        if (currentPlayersTurn.isHuman()) {
+            menuView.updateCardDisplay(currentPlayersTurn.getCardInHand());
+        }
         endTurn(currentPlayersTurn);
         nextTurn();
+    }
+
+    public void drawCard() {
+        Card card = deck.drawCard();
+        currentPlayersTurn.addCardToHand(card);
+
+        if (currentPlayersTurn.isHuman()) {
+            menuView.updateCardDisplay(currentPlayersTurn.getCardInHand());
+        }
+    }
+
+    public void nextCard() {
+        currentPlayersTurn.nextCard();
+
+        if (currentPlayersTurn.isHuman()) {
+            menuView.updateCardDisplay(currentPlayersTurn.getCardInHand());
+        }
+    }
+
+    public void discardFromHand() {
+        currentPlayersTurn.discard();
+
+        if (currentPlayersTurn.isHuman()) {
+            menuView.updateCardDisplay(currentPlayersTurn.getCardInHand());
+        }
+    }
+
+    public void discard(Card card) {
+        deck.discard(card);
     }
 
     public Context getApplicationContext() {
@@ -160,4 +203,5 @@ public class GameController {
     public GameBoard getGameBoard() {
         return gameBoard;
     }
+
 }

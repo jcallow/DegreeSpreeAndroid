@@ -1,44 +1,137 @@
 package com.jvn.degreespree.models;
 
 import com.jvn.degreespree.controllers.GameController;
+import com.jvn.degreespree.models.cards.Card;
+
+import java.util.ArrayList;
 
 /**
  * Created by john on 10/5/15.
  */
-public interface Player {
+abstract public class Player {
 
-    String getPlayerName();
+    protected String playerName;
+    protected BoardPosition boardPosition;
 
-    BoardPosition getBoardPosition();
+    protected int learning = 0;
+    protected int craft = 0;
+    protected int integrity = 0;
+    protected int qualityPoints = 0;
 
-    void setBoardPosition(BoardPosition position);
+    protected ArrayList<Card> cards = new ArrayList<>();
+    protected Card cardInHand;
+    protected GameController gameController;
 
-    boolean isHuman();
+    protected int movesLeft = 0;
 
-    void startTurn();
+    public String getPlayerName() {
+        return playerName;
+    }
 
-    void endTurn();
+    public BoardPosition getBoardPosition() {
+        return boardPosition;
+    }
 
-    public int getLearning();
+    public void setBoardPosition(BoardPosition position) {
+        boardPosition = position;
+    }
 
-    public void setLearning(int learning);
+    public abstract boolean isHuman();
 
-    public int getCraft();
+    public abstract void startTurn();
 
-    public void setCraft(int craft);
+    public abstract void endTurn();
 
-    public int getIntegrity();
+    public int getLearning() {
+        return learning;
+    }
 
-    public void setIntegrity(int integrety);
+    public void setLearning(int learning) {
+        this.learning = learning;
+    }
 
-    public int getQualityPoints();
+    public int getCraft() {
+        return craft;
+    }
 
-    public void setQualityPoints(int qualityPoints);
+    public void setCraft(int craft) {
+        this.craft = craft;
+    }
 
-    public int getMovesLeft();
+    public int getIntegrity() {
+        return integrity;
+    }
 
-    public void decrementMovesLeft();
+    public void setIntegrity(int integrety) {
+        this.integrity = integrety;
+    }
 
-    public void bind(GameController controller);
+    public int getQualityPoints() {
+        return qualityPoints;
+    }
+
+    public void setQualityPoints(int qualityPoints) {
+        this.qualityPoints = qualityPoints;
+    }
+
+    public int getMovesLeft() {
+        return movesLeft;
+    }
+
+    public void decrementMovesLeft() {
+        movesLeft--;
+    }
+
+    public void bind(GameController controller) {
+        this.gameController = controller;
+    }
+
+    public void playCardInHand() {
+        cardInHand.play(this);
+        gameController.discard(cardInHand);
+        cards.remove(cardInHand);
+
+        if (cards.size() > 0) {
+            cardInHand = cards.get(0);
+        } else {
+            cardInHand = null;
+        }
+    }
+
+    public void nextCard() {
+        int index = cards.indexOf(cardInHand);
+
+        index = (index + 1)%cards.size();
+
+        cardInHand = cards.get(index);
+    }
+
+    public void addCardToHand(Card card) {
+        cards.add(card);
+        cardInHand = cards.get(0);
+    }
+
+    public void addToHand(ArrayList<Card> crds) {
+        cards.addAll(crds);
+        cardInHand = cards.get(0);
+    }
+
+    public Card getCardInHand() {
+        return cardInHand;
+    }
+
+    public Card discard() {
+        Card card = cardInHand;
+        cards.remove(cardInHand);
+        gameController.discard(cardInHand);
+        if (cards.size() > 0) {
+            cardInHand = cards.get(0);
+        } else {
+            cardInHand = null;
+        }
+
+        return card;
+
+    }
 
 }
