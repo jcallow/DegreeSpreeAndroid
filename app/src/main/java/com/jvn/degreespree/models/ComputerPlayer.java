@@ -29,11 +29,12 @@ public class ComputerPlayer extends Player {
 
     @Override
     public void startTurn() {
+        gameController.drawCard();
         movesLeft = 3;
 
         while(movesLeft > 0) {
             boardPosition = getRandomPosition();
-            Log.d(TAG, "Computer made move");
+            Log.d(TAG, "Computer moved to: " + boardPosition);
             gameController.movePlayer(boardPosition);
         }
 

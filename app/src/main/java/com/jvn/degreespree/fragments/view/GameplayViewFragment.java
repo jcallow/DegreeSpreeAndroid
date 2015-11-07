@@ -18,7 +18,10 @@ import android.widget.ListView;
 import com.jvn.degreespree.R;
 import com.jvn.degreespree.controllers.GameController;
 import com.jvn.degreespree.models.BoardPosition;
+import com.jvn.degreespree.models.Deck;
+import com.jvn.degreespree.models.Player;
 import com.jvn.degreespree.models.cards.Card;
+import com.jvn.degreespree.widgets.StatsRow;
 
 import java.util.ArrayList;
 
@@ -34,14 +37,20 @@ public class GameplayViewFragment extends Fragment {
     private Button mShowBoard;
     private Button mPlayCard;
     private Button mDrawCard;
-    private Button mDiscard;
-    private Button mNextCard;
     private ListView mMovableLocationLists;
     private ArrayAdapter<BoardPosition> movableLocations;
     private ImageView mCardView;
     private Integer currentCard = null;
 
     private BoardPosition currentlySelected = null;
+
+    private boolean moveEnabled = false;
+    private boolean drawEnabled = false;
+    private boolean playEnabled = false;
+
+    private StatsRow mPlayer1Score;
+    private StatsRow mPlayer2Score;
+    private StatsRow mPlayer3Score;
 
     public void bind(GameController controller) {
         this.controller = controller;
@@ -75,10 +84,11 @@ public class GameplayViewFragment extends Fragment {
         initShowBoardButton(v);
         initMoveButton(v);
         initMoveList(v);
-        initDrawCardButton(v);
+        initPlayCard(v);
         initCardDisplay(v);
         initDrawCard(v);
         initNextCard(v);
+        initScoreBoard(v);
     }
 
     private void initDrawCard(View v) {
@@ -91,16 +101,14 @@ public class GameplayViewFragment extends Fragment {
                 controller.drawCard();
             }
         });
-    }
 
-    private void initDiscard() {
+        mDrawCard.setEnabled(drawEnabled);
 
     }
 
     private void initNextCard(View v) {
-        mNextCard = (Button) v.findViewById(R.id.next_card);
 
-        mNextCard.setOnClickListener(new View.OnClickListener() {
+        mCardView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 controller.nextCard();
@@ -130,9 +138,11 @@ public class GameplayViewFragment extends Fragment {
                 }
             }
         });
+
+        mMove.setEnabled(moveEnabled);
     }
 
-    private void initDrawCardButton(View v) {
+    private void initPlayCard(View v) {
         mPlayCard = (Button) v.findViewById(R.id.play_card);
         mPlayCard.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -141,6 +151,7 @@ public class GameplayViewFragment extends Fragment {
                 controller.playCard(null);
             }
         });
+        mPlayCard.setEnabled(playEnabled);
     }
 
     private void initMoveList(View v) {
@@ -163,6 +174,14 @@ public class GameplayViewFragment extends Fragment {
         }
     }
 
+    private void initScoreBoard(View v) {
+        mPlayer1Score = (StatsRow) v.findViewById(R.id.player1);
+        mPlayer2Score = (StatsRow) v.findViewById(R.id.player2);
+        mPlayer3Score = (StatsRow) v.findViewById(R.id.player3);
+
+        controller.updateScores();
+    }
+
     public void updateMovableLocation(ArrayList<BoardPosition> positions) {
         movableLocations.clear();
         movableLocations.addAll(positions);
@@ -176,5 +195,58 @@ public class GameplayViewFragment extends Fragment {
         if (mCardView != null) {
             mCardView.setImageResource(card.getImageRef());
         }
+    }
+
+    public void disableMove() {
+        moveEnabled = false;
+        if (mMove != null) mMove.setEnabled(moveEnabled);
+
+    }
+
+    public void enableMove() {
+        moveEnabled = true;
+        if (mMove != null) mMove.setEnabled(moveEnabled);
+    }
+
+    public void enableDrawCard() {
+        drawEnabled = true;
+        if (mDrawCard != null) mDrawCard.setEnabled(drawEnabled);
+    }
+
+    public void disableDrawCard() {
+        drawEnabled = false;
+        if (mDrawCard != null) mDrawCard.setEnabled(drawEnabled);
+    }
+
+    public void enablePlayCard() {
+        playEnabled = true;
+        if (mPlayCard != null) mPlayCard.setEnabled(playEnabled);
+    }
+
+    public void disablePlayCard() {
+        playEnabled =false;
+        if (mPlayCard != null) mPlayCard.setEnabled(playEnabled);
+    }
+
+    public void disableUi() {
+        disableDrawCard();
+        disableMove();
+        disablePlayCard();
+    }
+
+    public void updateScoreBoard(ArrayList<Player> players, Deck deck) {
+        if (mPlayer1Score != null) {
+            mPlayer1Score.update(players.get(0));
+        }
+        if (mPlayer2Score != null) {
+            mPlayer2Score.update(players.get(1));
+        }
+        if (mPlayer3Score != null) {
+            mPlayer3Score.update(players.get(2));
+        }
+    }
+
+    public void addTurnInfo() {
+
     }
 }

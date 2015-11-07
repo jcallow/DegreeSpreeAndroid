@@ -73,6 +73,7 @@ public class GameController {
 
         gameSettings = new GameSettings();
         players = gameSettings.getPlayers();
+        menuView.disableUi();
 
         for (Player player : players) {
             player.setBoardPosition(gameBoard.getPosition(17));
@@ -84,10 +85,11 @@ public class GameController {
             }
         }
 
-        viewBoard();
+        viewGameMenu();
 
         addPlayers(players);
 
+        updateScores();
 
         startTurn(players.get(currentPlayerIndex));
 
@@ -99,19 +101,24 @@ public class GameController {
 
     private void startTurn(Player player) {
         currentPlayersTurn = player;
-        currentPlayersTurn.addCardToHand(deck.drawCard());
+
         if (player.isHuman()) {
-            player.startTurn();
+            Log.i(TAG, "Starting turn player.");
+            menuView.enableDrawCard();
+            menuView.disableMove();
+            menuView.disablePlayCard();
             ArrayList<BoardPosition> positions = gameBoard.getPositions(player.getBoardPosition().getNearbyPositions());
             menuView.updateMovableLocation(positions);
-        } else {
-            // Eventually disable components so player cant screw the game up
+            player.startTurn();
+        } else if (!player.isHuman()){
+            menuView.disableUi();
+            Log.i(TAG, "Starting turn computer.");
             player.startTurn();
         }
-
     }
 
     private void endTurn(Player player) {
+        updateScores();
         player.endTurn();
     }
 
@@ -146,6 +153,8 @@ public class GameController {
                 menuView.updateMovableLocation(movableLocations);
             }
 
+            if(currentPlayersTurn.getMovesLeft() == 0 && currentPlayersTurn.isHuman()) menuView.disableMove();
+
         }
     }
 
@@ -155,6 +164,8 @@ public class GameController {
             menuView.updateCardDisplay(currentPlayersTurn.getCardInHand());
         }
         endTurn(currentPlayersTurn);
+        currentPlayersTurn.setIntegrity(currentPlayersTurn.getIntegrity()+1);
+        updateScores();
         nextTurn();
     }
 
@@ -164,6 +175,9 @@ public class GameController {
 
         if (currentPlayersTurn.isHuman()) {
             menuView.updateCardDisplay(currentPlayersTurn.getCardInHand());
+            menuView.disableDrawCard();
+            menuView.enableMove();
+            menuView.enablePlayCard();
         }
     }
 
@@ -198,6 +212,10 @@ public class GameController {
 
     private void endGame() {
 
+    }
+
+    public void updateScores() {
+        menuView.updateScoreBoard(players, deck);
     }
 
     public GameBoard getGameBoard() {

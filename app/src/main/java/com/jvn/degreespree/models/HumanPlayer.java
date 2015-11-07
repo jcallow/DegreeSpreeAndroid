@@ -12,7 +12,9 @@ public class HumanPlayer extends Player {
 
     public HumanPlayer(String name) {
         cards = new ArrayList<Card>();
+
         playerName = name;
+        initializePoints();
     }
 
     @Override

@@ -5,6 +5,8 @@ import android.util.AttributeSet;
 import android.widget.TableRow;
 import android.widget.TextView;
 
+import com.jvn.degreespree.models.Player;
+
 /**
  * Created by john on 10/5/15.
  */
@@ -77,5 +79,13 @@ public class StatsRow extends TableRow {
         qualityPoints.getLayoutParams().height=LayoutParams.MATCH_PARENT;
         qualityPoints.getLayoutParams().width=100;
 
+    }
+
+    public void update(Player player) {
+        setLearningValue(player.getLearning());
+        setCraftValue(player.getCraft());
+        setIntegrityValue(player.getIntegrity());
+        setNameValue(player.getPlayerName());
+        setQualityPointsValue(player.getQualityPoints());
     }
 }

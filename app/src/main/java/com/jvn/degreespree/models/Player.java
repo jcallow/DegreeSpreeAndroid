@@ -1,5 +1,7 @@
 package com.jvn.degreespree.models;
 
+import android.util.Log;
+
 import com.jvn.degreespree.controllers.GameController;
 import com.jvn.degreespree.models.cards.Card;
 
@@ -9,6 +11,7 @@ import java.util.ArrayList;
  * Created by john on 10/5/15.
  */
 abstract public class Player {
+    private String TAG = "Player";
 
     protected String playerName;
     protected BoardPosition boardPosition;
@@ -23,6 +26,13 @@ abstract public class Player {
     protected GameController gameController;
 
     protected int movesLeft = 0;
+
+    protected void initializePoints() {
+        integrity = 0;
+        craft = 0;
+        qualityPoints = 0;
+        learning = 0;
+    }
 
     public String getPlayerName() {
         return playerName;
@@ -107,7 +117,8 @@ abstract public class Player {
     }
 
     public void addCardToHand(Card card) {
-        cards.add(card);
+        Log.i(TAG, "Added card: " + card.getImageRef());
+        cards.add(0, card);
         cardInHand = cards.get(0);
     }
 
