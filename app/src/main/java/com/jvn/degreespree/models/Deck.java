@@ -6,22 +6,41 @@ import com.jvn.degreespree.models.cards.CECS100;
 import com.jvn.degreespree.models.cards.CECS105;
 import com.jvn.degreespree.models.cards.CECS174;
 import com.jvn.degreespree.models.cards.Card;
+import com.jvn.degreespree.models.cards.Chem111;
 import com.jvn.degreespree.models.cards.ChooseMajor;
+import com.jvn.degreespree.models.cards.DeansList;
+import com.jvn.degreespree.models.cards.ElectiveClass;
 import com.jvn.degreespree.models.cards.EnjoyPeace;
+import com.jvn.degreespree.models.cards.EnjoyingNature;
 import com.jvn.degreespree.models.cards.ExercisingMB;
+import com.jvn.degreespree.models.cards.FallPond;
 import com.jvn.degreespree.models.cards.FindLab;
 import com.jvn.degreespree.models.cards.GoodbyeProfessor;
 import com.jvn.degreespree.models.cards.Kin253;
 import com.jvn.degreespree.models.cards.LateForClass;
 import com.jvn.degreespree.models.cards.LearnNetBeans;
+import com.jvn.degreespree.models.cards.LearningLinux;
+import com.jvn.degreespree.models.cards.LoudBuzzing;
 import com.jvn.degreespree.models.cards.LunchBratWurst;
+import com.jvn.degreespree.models.cards.MakeFriend;
 import com.jvn.degreespree.models.cards.Math122;
 import com.jvn.degreespree.models.cards.Math123;
+import com.jvn.degreespree.models.cards.MeetDean;
+import com.jvn.degreespree.models.cards.NewLaptop;
+import com.jvn.degreespree.models.cards.OralCommunication;
 import com.jvn.degreespree.models.cards.ParkingViolation;
 import com.jvn.degreespree.models.cards.PassSoccer;
 import com.jvn.degreespree.models.cards.Phys151;
+import com.jvn.degreespree.models.cards.PressRightFloor;
+import com.jvn.degreespree.models.cards.ProfessorEnglert;
+import com.jvn.degreespree.models.cards.ProfessorHoffman;
+import com.jvn.degreespree.models.cards.ProgramCrashes;
 import com.jvn.degreespree.models.cards.ResearchCompilers;
+import com.jvn.degreespree.models.cards.ScoreGoal;
+import com.jvn.degreespree.models.cards.SoccerGoalie;
+import com.jvn.degreespree.models.cards.StudentParking;
 import com.jvn.degreespree.models.cards.TheBigGame;
+import com.jvn.degreespree.models.cards.TheOutpost;
 
 import java.util.ArrayDeque;
 import java.util.ArrayList;
@@ -95,11 +114,25 @@ public class Deck {
         cards.add(new Phys151());
         cards.add(new ResearchCompilers());
         cards.add(new TheBigGame());
-
-
-        for(int i = 0; i < 20; i++) {
-            cards.add(new EnjoyPeace());
-        }
+        cards.add(new Chem111());
+        cards.add(new DeansList());
+        cards.add(new ElectiveClass());
+        cards.add(new EnjoyingNature());
+        cards.add(new FallPond());
+        cards.add(new LearningLinux());
+        cards.add(new LoudBuzzing());
+        cards.add(new MakeFriend());
+        cards.add(new MeetDean());
+        cards.add(new NewLaptop());
+        cards.add(new OralCommunication());
+        cards.add(new PressRightFloor());
+        cards.add(new ProfessorEnglert());
+        cards.add(new ProfessorHoffman());
+        cards.add(new ProgramCrashes());
+        cards.add(new ScoreGoal());
+        cards.add(new SoccerGoalie());
+        cards.add(new StudentParking());
+        cards.add(new TheOutpost());
 
         for (Card card : cards) {
             card.bind(controller);

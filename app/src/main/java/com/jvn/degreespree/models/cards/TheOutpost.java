@@ -7,19 +7,19 @@ import com.jvn.degreespree.models.Reward;
 import com.jvn.degreespree.models.RewardCallback;
 
 /**
- * Created by john on 11/1/15.
+ * Created by john on 11/11/15.
  */
-public class Math122 extends Card implements RewardCallback{
+public class TheOutpost extends Card implements RewardCallback {
 
-    public Math122() {
-        cardName = "Math 122";
-        imageRef = R.drawable.math122;
+    public TheOutpost() {
+        cardName = "The Outpost";
+        imageRef = R.drawable.theoutpost;
     }
 
     @Override
     protected boolean correctPosition(Player player) {
         int position = player.getBoardPosition().getIndex();
-        return (position == 7);
+        return (position < 11 && position != 5);
     }
 
     @Override
@@ -30,9 +30,9 @@ public class Math122 extends Card implements RewardCallback{
     @Override
     protected void success(Reward reward) {
         if (playedBy.isHuman()) {
-            controller.openRewardDialog(1, true, false, true, this, reward);
+            controller.openRewardDialog(1, true, true, true, this, reward);
         } else {
-            ((ComputerPlayer) playedBy).pickReward(1, true, false, true, reward);
+            ((ComputerPlayer) playedBy).pickReward(1, true, true, true, reward);
             playedBy.rewardPlayer(reward);
             playedBy.endTurn();
         }

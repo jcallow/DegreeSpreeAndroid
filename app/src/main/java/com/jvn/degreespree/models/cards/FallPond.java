@@ -1,46 +1,42 @@
 package com.jvn.degreespree.models.cards;
 
 import com.jvn.degreespree.R;
-import com.jvn.degreespree.models.ComputerPlayer;
+import com.jvn.degreespree.models.BoardPosition;
 import com.jvn.degreespree.models.Player;
 import com.jvn.degreespree.models.Reward;
 import com.jvn.degreespree.models.RewardCallback;
 
 /**
- * Created by john on 11/1/15.
+ * Created by john on 11/11/15.
  */
-public class Math122 extends Card implements RewardCallback{
+public class FallPond extends Card implements RewardCallback {
 
-    public Math122() {
-        cardName = "Math 122";
-        imageRef = R.drawable.math122;
+    public FallPond() {
+        cardName = "Fall in the Pond";
+        imageRef = R.drawable.fallpond;
     }
 
     @Override
     protected boolean correctPosition(Player player) {
         int position = player.getBoardPosition().getIndex();
-        return (position == 7);
+        return (position == 1);
     }
 
     @Override
     protected boolean meetsRequirements(Player player) {
-        return true;
+        if (player.getLearning() >= 3) return true;
+        return false;
     }
 
     @Override
     protected void success(Reward reward) {
-        if (playedBy.isHuman()) {
-            controller.openRewardDialog(1, true, false, true, this, reward);
-        } else {
-            ((ComputerPlayer) playedBy).pickReward(1, true, false, true, reward);
-            playedBy.rewardPlayer(reward);
-            playedBy.endTurn();
-        }
-
+        controller.openRewardDialog(1, true, true, false, this, reward);
     }
 
     @Override
     protected void fail(Reward reward) {
+        BoardPosition position = controller.getGameBoard().getPosition(20);
+        controller.movePlayer(position);
         playedBy.rewardPlayer(reward);
         playedBy.endTurn();
     }
@@ -51,3 +47,4 @@ public class Math122 extends Card implements RewardCallback{
         playedBy.endTurn();
     }
 }
+

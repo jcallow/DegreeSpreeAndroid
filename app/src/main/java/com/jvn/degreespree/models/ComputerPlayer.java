@@ -14,8 +14,6 @@ import java.util.Random;
 public class ComputerPlayer extends Player {
     private static final String TAG = "ComputerPlayer";
 
-    private Random r;
-
     public ComputerPlayer(String name) {
         cards = new ArrayList<>();
         playerName = name;
@@ -63,6 +61,14 @@ public class ComputerPlayer extends Player {
     }
 
     public void pickReward(int points, boolean learningOn, boolean craftOn, boolean integrityOn, Reward reward) {
+        int remaining = points;
 
+        while (remaining > 0) {
+            int pick = r.nextInt(3);
+
+            if (pick == 0 && learningOn) reward.add(1,0,0,0);
+            if (pick == 1 && craftOn) reward.add(0,1,0,0);
+            if (pick == 2 && integrityOn) reward.add(0,0,1,0);
+        }
     }
 }

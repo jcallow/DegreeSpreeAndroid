@@ -7,32 +7,34 @@ import com.jvn.degreespree.models.Reward;
 import com.jvn.degreespree.models.RewardCallback;
 
 /**
- * Created by john on 11/1/15.
+ * Created by john on 11/12/15.
  */
-public class Math122 extends Card implements RewardCallback{
+public class LearningLinux extends Card implements RewardCallback {
 
-    public Math122() {
-        cardName = "Math 122";
-        imageRef = R.drawable.math122;
+    public LearningLinux() {
+        cardName = "Learning Linux";
+        imageRef = R.drawable.learninglinux;
     }
 
     @Override
     protected boolean correctPosition(Player player) {
         int position = player.getBoardPosition().getIndex();
-        return (position == 7);
+        return (position == 11);
     }
 
     @Override
     protected boolean meetsRequirements(Player player) {
-        return true;
+        if (player.getCraft() >= 2 && player.getIntegrity() >= 3) return true;
+        return false;
     }
 
     @Override
     protected void success(Reward reward) {
+        reward.add(0,0,0,3);
         if (playedBy.isHuman()) {
-            controller.openRewardDialog(1, true, false, true, this, reward);
+            controller.openRewardDialog(1, true, true, true, this, reward);
         } else {
-            ((ComputerPlayer) playedBy).pickReward(1, true, false, true, reward);
+            ((ComputerPlayer) playedBy).pickReward(1, true, true, true, reward);
             playedBy.rewardPlayer(reward);
             playedBy.endTurn();
         }
@@ -41,6 +43,7 @@ public class Math122 extends Card implements RewardCallback{
 
     @Override
     protected void fail(Reward reward) {
+        reward.add(0,0,0,-1);
         playedBy.rewardPlayer(reward);
         playedBy.endTurn();
     }

@@ -1,5 +1,7 @@
 package com.jvn.degreespree.models;
 
+import com.jvn.degreespree.Utils.RandomPlayer;
+
 import java.util.ArrayList;
 import java.util.Collections;
 
@@ -22,15 +24,15 @@ public class GameSettings {
 
     public GameSettings() {
         players = new ArrayList<>(3);
-        Player player1 = new HumanPlayer("John");
-        Player player2 = new ComputerPlayer("Cybord");
-        Player player3 = new ComputerPlayer("CatBot");
+        RandomPlayer.reset();
+        Player player1 = new HumanPlayer(RandomPlayer.getName());
+        Player player2 = new ComputerPlayer(RandomPlayer.getName());
+        Player player3 = new ComputerPlayer(RandomPlayer.getName());
 
         players.add(player1);
         players.add(player2);
         players.add(player3);
 
-        Collections.shuffle(players);
     }
 
     public ArrayList<Player> getPlayers() {

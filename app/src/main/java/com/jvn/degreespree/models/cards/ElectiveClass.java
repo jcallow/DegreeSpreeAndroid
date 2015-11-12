@@ -2,18 +2,19 @@ package com.jvn.degreespree.models.cards;
 
 import com.jvn.degreespree.R;
 import com.jvn.degreespree.models.ComputerPlayer;
+import com.jvn.degreespree.models.DiscardCallback;
 import com.jvn.degreespree.models.Player;
 import com.jvn.degreespree.models.Reward;
 import com.jvn.degreespree.models.RewardCallback;
 
 /**
- * Created by john on 11/1/15.
+ * Created by john on 11/11/15.
  */
-public class Math122 extends Card implements RewardCallback{
+public class ElectiveClass extends Card implements RewardCallback {
 
-    public Math122() {
-        cardName = "Math 122";
-        imageRef = R.drawable.math122;
+    public ElectiveClass() {
+        cardName = "Elective Class";
+        imageRef = R.drawable.electiveclass;
     }
 
     @Override
@@ -24,15 +25,17 @@ public class Math122 extends Card implements RewardCallback{
 
     @Override
     protected boolean meetsRequirements(Player player) {
-        return true;
+        if (player.getLearning() >= 2) return true;
+        return false;
     }
 
     @Override
     protected void success(Reward reward) {
+        controller.drawCard();
         if (playedBy.isHuman()) {
-            controller.openRewardDialog(1, true, false, true, this, reward);
+            controller.openRewardDialog(1, true, true, true, this, reward);
         } else {
-            ((ComputerPlayer) playedBy).pickReward(1, true, false, true, reward);
+            ((ComputerPlayer) playedBy).pickReward(1, true, true, true, reward);
             playedBy.rewardPlayer(reward);
             playedBy.endTurn();
         }
@@ -41,6 +44,7 @@ public class Math122 extends Card implements RewardCallback{
 
     @Override
     protected void fail(Reward reward) {
+        reward.add(0,0,0,-2);
         playedBy.rewardPlayer(reward);
         playedBy.endTurn();
     }

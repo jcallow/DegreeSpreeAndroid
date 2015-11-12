@@ -147,6 +147,7 @@ public class GameplayViewFragment extends Fragment {
 
                 if (currentlySelected != null) {
                     controller.movePlayer(currentlySelected);
+                    currentlySelected = null;
                 }
             }
         });

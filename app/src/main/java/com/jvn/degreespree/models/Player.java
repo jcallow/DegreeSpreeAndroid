@@ -6,6 +6,7 @@ import com.jvn.degreespree.controllers.GameController;
 import com.jvn.degreespree.models.cards.Card;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 /**
  * Created by john on 10/5/15.
@@ -15,6 +16,8 @@ abstract public class Player {
 
     protected String playerName;
     protected BoardPosition boardPosition;
+
+    protected Random r;
 
     protected int learning = 0;
     protected int craft = 0;
@@ -29,11 +32,19 @@ abstract public class Player {
 
     protected int movesLeft = 0;
 
+    public Player() {
+        r = new Random();
+        initializePoints();
+    }
+
     protected void initializePoints() {
-        integrity = 0;
-        craft = 0;
-        qualityPoints = 0;
-        learning = 0;
+        for (int i = 0; i < 6; i++) {
+            int rand = r.nextInt(3);
+
+            if (rand == 0) learning++;
+            if (rand == 1) craft++;
+            if (rand == 2) integrity++;
+        }
     }
 
     public String getPlayerName() {
