@@ -14,12 +14,14 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.jvn.degreespree.R;
 import com.jvn.degreespree.controllers.GameController;
 import com.jvn.degreespree.models.BoardPosition;
 import com.jvn.degreespree.models.Deck;
 import com.jvn.degreespree.models.Player;
+import com.jvn.degreespree.models.TurnInfo;
 import com.jvn.degreespree.models.cards.Card;
 import com.jvn.degreespree.widgets.StatsRow;
 
@@ -41,6 +43,8 @@ public class GameplayViewFragment extends Fragment {
     private ArrayAdapter<BoardPosition> movableLocations;
     private ImageView mCardView;
     private Integer currentCard = null;
+    private TextView mCardsInDeck;
+    private TextView mCardsOutPlay;
 
     private BoardPosition currentlySelected = null;
 
@@ -51,19 +55,26 @@ public class GameplayViewFragment extends Fragment {
     private StatsRow mPlayer1Score;
     private StatsRow mPlayer2Score;
     private StatsRow mPlayer3Score;
+    private TextView mPlayerInfo;
+
+    private ArrayAdapter<TurnInfo> turnsTaken;
+    private ListView mTurnsTaken;
 
     public void bind(GameController controller) {
         this.controller = controller;
     }
 
     public void init() {
-       initMoveList();
+        initMoveList();
+        initTurnsTaken();
     }
 
     private void initMoveList() {
-
         movableLocations = new ArrayAdapter<BoardPosition>(controller.getApplicationContext(), android.R.layout.simple_list_item_1, android.R.id.text1, new ArrayList<BoardPosition>());
+    }
 
+    private void initTurnsTaken() {
+        turnsTaken = new ArrayAdapter<TurnInfo>(controller.getApplicationContext(), android.R.layout.simple_list_item_1, android.R.id.text1, new ArrayList<TurnInfo>());
     }
 
     @Override
@@ -89,6 +100,7 @@ public class GameplayViewFragment extends Fragment {
         initDrawCard(v);
         initNextCard(v);
         initScoreBoard(v);
+        initTurnsInfo(v);
     }
 
     private void initDrawCard(View v) {
@@ -179,7 +191,18 @@ public class GameplayViewFragment extends Fragment {
         mPlayer2Score = (StatsRow) v.findViewById(R.id.player2);
         mPlayer3Score = (StatsRow) v.findViewById(R.id.player3);
 
+        mCardsInDeck = (TextView) v.findViewById(R.id.cards_in_deck);
+        mCardsOutPlay = (TextView) v.findViewById(R.id.cards_out_play);
+
+        mPlayerInfo = (TextView) v.findViewById(R.id.current_player);
+
+        controller.updatePlayerInfo();
         controller.updateScores();
+    }
+
+    private void initTurnsInfo(View v) {
+        mTurnsTaken = (ListView) v.findViewById(R.id.turns_info);
+        mTurnsTaken.setAdapter(turnsTaken);
     }
 
     public void updateMovableLocation(ArrayList<BoardPosition> positions) {
@@ -244,9 +267,28 @@ public class GameplayViewFragment extends Fragment {
         if (mPlayer3Score != null) {
             mPlayer3Score.update(players.get(2));
         }
+
+        if (mCardsInDeck != null) {
+            mCardsInDeck.setText(deck.inPlay() + "");
+        }
+
+        if (mCardsOutPlay != null) {
+            mCardsOutPlay.setText(deck.outPlay() + "");
+        }
     }
 
-    public void addTurnInfo() {
+    public void addTurnInfo(TurnInfo info) {
+        turnsTaken.add(info);
+    }
 
+    public void updatePlayerInfo(Player player) {
+        if (mPlayerInfo != null) {
+            if (player.isHuman()) {
+                mPlayerInfo.setText("Human player is " + player.getPlayerName() + " and is in " + player.getBoardPosition().toString());
+            } else {
+                mPlayerInfo.setText("Computer player is " + player.getPlayerName() + " and is in " + player.getBoardPosition().toString());
+            }
+
+        }
     }
 }

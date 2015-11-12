@@ -52,6 +52,13 @@ public class ComputerPlayer extends Player {
 
     @Override
     public void endTurn() {
+        TurnInfo info = new TurnInfo(playerName, boardPosition.toString(), turnCard.toString(), turnReward);
+        gameController.addTurnInfo(info);
+        gameController.nextTurn();
+    }
 
+    public void chooseDiscard() {
+        Card discard = cards.get(r.nextInt(cards.size()));
+        discard(discard);
     }
 }

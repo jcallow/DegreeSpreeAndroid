@@ -23,6 +23,8 @@ abstract public class Player {
 
     protected ArrayList<Card> cards = new ArrayList<>();
     protected Card cardInHand;
+    protected Card turnCard;
+    protected Reward turnReward;
     protected GameController gameController;
 
     protected int movesLeft = 0;
@@ -97,9 +99,11 @@ abstract public class Player {
     }
 
     public void playCardInHand() {
-        cardInHand.play(this);
-        gameController.discard(cardInHand);
+        turnCard = cardInHand;
+        gameController.placeInDiscardPile(cardInHand);
         cards.remove(cardInHand);
+        cardInHand.play(this);
+
 
         if (cards.size() > 0) {
             cardInHand = cards.get(0);
@@ -131,10 +135,11 @@ abstract public class Player {
         return cardInHand;
     }
 
-    public Card discard() {
+    public Card discardCardInHand() {
         Card card = cardInHand;
+        turnCard = card;
         cards.remove(cardInHand);
-        gameController.discard(cardInHand);
+        gameController.placeInDiscardPile(cardInHand);
         if (cards.size() > 0) {
             cardInHand = cards.get(0);
         } else {
@@ -143,6 +148,35 @@ abstract public class Player {
 
         return card;
 
+    }
+
+    public void discard(Card card) {
+        cards.remove(card);
+        gameController.placeInDiscardPile(card);
+
+        if (cards.size() > 0) {
+            cardInHand = cards.get(0);
+        } else {
+            cardInHand = null;
+        }
+    }
+
+    public void rewardPlayer(Reward reward) {
+        turnReward = reward;
+        if (!reward.isCorrectPosition()) {
+            qualityPoints -= 2;
+        }
+        if (!reward.isMetPrereqs()) {
+            qualityPoints -= 2;
+        }
+        learning += reward.getLearning();
+        integrity += reward.getIntegrity();
+        craft += reward.getCraft();
+        qualityPoints += reward.getQualityPoints();
+    }
+
+    public ArrayList<Card> getCards() {
+        return cards;
     }
 
 }

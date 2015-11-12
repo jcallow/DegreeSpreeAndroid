@@ -29,6 +29,8 @@ public class HumanPlayer extends Player {
 
     @Override
     public void endTurn() {
-
+        TurnInfo info = new TurnInfo(playerName, boardPosition.toString(), turnCard.toString(), turnReward);
+        gameController.addTurnInfo(info);
+        gameController.nextTurn();
     }
 }

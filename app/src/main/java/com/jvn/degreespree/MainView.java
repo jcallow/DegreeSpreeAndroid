@@ -1,9 +1,13 @@
 package com.jvn.degreespree;
 
+import android.app.Dialog;
+
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.app.DialogFragment;
 import android.os.Bundle;
+import android.support.v4.app.FragmentTransaction;
 import android.util.DisplayMetrics;
 
 import com.jvn.degreespree.controllers.GameController;
@@ -34,6 +38,10 @@ public class MainView extends FragmentActivity {
         float logicalDensity = metrics.density;
         return logicalDensity;
 
+    }
+
+    public void showDiag(DialogFragment dialog) {
+        dialog.show(fm, "dialog");
     }
 
 }

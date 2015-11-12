@@ -1,6 +1,7 @@
 package com.jvn.degreespree.controllers;
 
 import android.content.Context;
+import android.support.v7.app.AlertDialog;
 import android.util.Log;
 
 import com.jvn.degreespree.MainView;
@@ -9,8 +10,13 @@ import com.jvn.degreespree.Utils.ScreenUtils;
 import com.jvn.degreespree.fragments.view.BoardViewFragment;
 import com.jvn.degreespree.fragments.view.GameplayViewFragment;
 import com.jvn.degreespree.fragments.view.StartFragment;
+import com.jvn.degreespree.fragments.view.dialogs.DiscardDialog;
+import com.jvn.degreespree.fragments.view.dialogs.RewardDialog;
 import com.jvn.degreespree.models.BoardPosition;
 import com.jvn.degreespree.models.Deck;
+import com.jvn.degreespree.models.DiscardCallback;
+import com.jvn.degreespree.models.Reward;
+import com.jvn.degreespree.models.TurnInfo;
 import com.jvn.degreespree.models.cards.CECS105;
 import com.jvn.degreespree.models.cards.Card;
 import com.jvn.degreespree.models.ComputerPlayer;
@@ -39,6 +45,8 @@ public class GameController {
     private int currentPlayerIndex = 0;
     private GameBoard gameBoard;
     private Deck deck;
+    private DiscardDialog discardDialog;
+    private RewardDialog rewardDialog;
 
     public GameController(MainView mainView) {
         this.mainView = mainView;
@@ -57,6 +65,14 @@ public class GameController {
         menuView.bind(this);
         menuView.init();
 
+        discardDialog = new DiscardDialog();
+        discardDialog.setCancelable(false);
+        discardDialog.bind(this);
+
+        rewardDialog = new RewardDialog();
+        rewardDialog.setCancelable(false);
+        rewardDialog.bind(this);
+
         init();
         startGame();
 
@@ -64,7 +80,7 @@ public class GameController {
 
     private void init() {
         gameBoard = new GameBoard();
-        deck = new Deck();
+        deck = new Deck(this);
     }
 
     public void startGame() {
@@ -101,6 +117,7 @@ public class GameController {
 
     private void startTurn(Player player) {
         currentPlayersTurn = player;
+        updatePlayerInfo();
 
         if (player.isHuman()) {
             Log.i(TAG, "Starting turn player.");
@@ -117,12 +134,8 @@ public class GameController {
         }
     }
 
-    private void endTurn(Player player) {
+    public void nextTurn() {
         updateScores();
-        player.endTurn();
-    }
-
-    private void nextTurn() {
         if (!gameHasEnded()) {
             currentPlayerIndex = (currentPlayerIndex + 1) % 3;
             Player nextPlayer = players.get(currentPlayerIndex);
@@ -156,6 +169,7 @@ public class GameController {
             if(currentPlayersTurn.getMovesLeft() == 0 && currentPlayersTurn.isHuman()) menuView.disableMove();
 
         }
+        updatePlayerInfo();
     }
 
     public void playCard(Card card) {
@@ -163,10 +177,7 @@ public class GameController {
         if (currentPlayersTurn.isHuman()) {
             menuView.updateCardDisplay(currentPlayersTurn.getCardInHand());
         }
-        endTurn(currentPlayersTurn);
-        currentPlayersTurn.setIntegrity(currentPlayersTurn.getIntegrity()+1);
         updateScores();
-        nextTurn();
     }
 
     public void drawCard() {
@@ -179,6 +190,8 @@ public class GameController {
             menuView.enableMove();
             menuView.enablePlayCard();
         }
+
+        updateScores();
     }
 
     public void nextCard() {
@@ -188,17 +201,14 @@ public class GameController {
             menuView.updateCardDisplay(currentPlayersTurn.getCardInHand());
         }
     }
-
-    public void discardFromHand() {
-        currentPlayersTurn.discard();
-
-        if (currentPlayersTurn.isHuman()) {
-            menuView.updateCardDisplay(currentPlayersTurn.getCardInHand());
-        }
+    
+    public void placeInDiscardPile(Card card) {
+        deck.discard(card);
+        updateScores();
     }
 
-    public void discard(Card card) {
-        deck.discard(card);
+    public void addTurnInfo(TurnInfo info) {
+        menuView.addTurnInfo(info);
     }
 
     public Context getApplicationContext() {
@@ -216,6 +226,20 @@ public class GameController {
 
     public void updateScores() {
         menuView.updateScoreBoard(players, deck);
+
+    }
+
+    public void updatePlayerInfo() {
+        menuView.updatePlayerInfo(currentPlayersTurn);
+    }
+
+    public void openRewardDialog(int tokens, boolean learning, boolean craft, boolean integrity, boolean quality, Card card) {
+        mainView.showDiag(rewardDialog);
+    }
+
+    public void openDiscardDialog(Player player, DiscardCallback callback) {
+        discardDialog.setPlayer(player, callback);
+        mainView.showDiag(discardDialog);
     }
 
     public GameBoard getGameBoard() {

@@ -207,11 +207,13 @@
                     android:background="@drawable/text_box_border">
 
                     <TextView
+
                         android:text="Cards in deck: "
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"/>
 
                     <TextView
+                        android:id="@+id/cards_in_deck"
                         android:text="35"
                         android:layout_width="80dp"
                         android:layout_height="match_parent"/>
@@ -222,7 +224,8 @@
                         android:layout_height="match_parent"/>
 
                     <TextView
-                        android:text="0"
+                        android:id="@+id/cards_out_play"
+                        android:text=""
                         android:layout_width="80dp"
                         android:layout_height="match_parent"/>
 
@@ -242,7 +245,8 @@
                     android:background="@drawable/text_box_border">
 
                     <TextView
-                        android:text="You are Amanda and you are in ECS 308"
+                        android:id="@+id/current_player"
+                        android:text=""
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"/>
 
@@ -255,18 +259,15 @@
                     android:layout_marginTop="5dp"
                     android:layout_gravity="center"/>
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="35dp"
+                <ListView
+                    android:id="@+id/turns_info"
                     android:layout_marginTop="5dp"
-                    android:background="@drawable/text_box_border">
-
-                    <TextView
-                        android:text="Human player is Amanda"
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"/>
-
-                </LinearLayout>
+                    android:layout_marginBottom="0dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="115dp"
+                    android:choiceMode="none"
+                    android:listSelector="@android:color/darker_gray"
+                    android:background="@drawable/text_box_border"/>
             </LinearLayout>
         </LinearLayout>
     </com.jvn.degreespree.widgets.ScrollableRelativeLayout>

@@ -1,5 +1,6 @@
 package com.jvn.degreespree.models;
 
+import com.jvn.degreespree.controllers.GameController;
 import com.jvn.degreespree.models.cards.BuddyUp;
 import com.jvn.degreespree.models.cards.CECS100;
 import com.jvn.degreespree.models.cards.CECS105;
@@ -32,13 +33,14 @@ import java.util.Queue;
  */
 public class Deck {
 
-    ArrayList<Card> cards;
+    private ArrayList<Card> cards;
+    private ArrayList<Card> discards;
+    private GameController controller;
 
-    ArrayList<Card> discards;
-
-    public Deck() {
+    public Deck(GameController controller) {
         cards = new ArrayList<>();
         discards = new ArrayList<>();
+        this.controller = controller;
         initDeck();
     }
 
@@ -95,13 +97,25 @@ public class Deck {
         cards.add(new TheBigGame());
 
 
+        for(int i = 0; i < 20; i++) {
+            cards.add(new GoodbyeProfessor());
+        }
 
+        for (Card card : cards) {
+            card.bind(controller);
+        }
         shuffle();
+
     }
 
-    private Card PassSoccer() {
-        return null;
+    public int inPlay() {
+        return cards.size();
     }
+
+    public int outPlay() {
+        return discards.size();
+    }
+
 
 
 }

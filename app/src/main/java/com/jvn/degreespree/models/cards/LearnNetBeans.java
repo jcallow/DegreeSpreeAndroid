@@ -5,6 +5,7 @@ package com.jvn.degreespree.models.cards;
  */
 import com.jvn.degreespree.R;
 import com.jvn.degreespree.models.Player;
+import com.jvn.degreespree.models.Reward;
 
 /**
  * Created by john on 11/1/15.
@@ -12,12 +13,33 @@ import com.jvn.degreespree.models.Player;
 public class LearnNetBeans extends Card {
 
     public LearnNetBeans() {
+        cardName = "Netbeans";
         imageRef = R.drawable.learnnetbeans;
     }
 
+    @Override
+    protected boolean correctPosition(Player player) {
+        int position = player.getBoardPosition().getIndex();
+        return (position == 20);
+    }
 
     @Override
-    public void play(Player player) {
+    protected boolean meetsRequirements(Player player) {
+        if (player.getLearning() >= 3) return true;
+        else return false;
+    }
 
+    @Override
+    protected void success(Reward reward) {
+        reward.add(0,0,0,5);
+        playedBy.rewardPlayer(reward);
+        playedBy.endTurn();
+    }
+
+    @Override
+    protected void fail(Reward reward) {
+        reward.add(0,0,0,-3);
+        playedBy.rewardPlayer(reward);
+        playedBy.endTurn();
     }
 }
