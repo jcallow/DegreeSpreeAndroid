@@ -98,7 +98,7 @@ public class Deck {
 
 
         for(int i = 0; i < 20; i++) {
-            cards.add(new GoodbyeProfessor());
+            cards.add(new EnjoyPeace());
         }
 
         for (Card card : cards) {

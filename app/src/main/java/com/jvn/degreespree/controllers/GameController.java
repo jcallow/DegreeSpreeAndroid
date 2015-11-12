@@ -16,6 +16,7 @@ import com.jvn.degreespree.models.BoardPosition;
 import com.jvn.degreespree.models.Deck;
 import com.jvn.degreespree.models.DiscardCallback;
 import com.jvn.degreespree.models.Reward;
+import com.jvn.degreespree.models.RewardCallback;
 import com.jvn.degreespree.models.TurnInfo;
 import com.jvn.degreespree.models.cards.CECS105;
 import com.jvn.degreespree.models.cards.Card;
@@ -233,7 +234,8 @@ public class GameController {
         menuView.updatePlayerInfo(currentPlayersTurn);
     }
 
-    public void openRewardDialog(int tokens, boolean learning, boolean craft, boolean integrity, boolean quality, Card card) {
+    public void openRewardDialog(int points, boolean learning, boolean craft, boolean integrity, RewardCallback callback, Reward reward) {
+        rewardDialog.setup(points, learning, craft, integrity, callback, reward);
         mainView.showDiag(rewardDialog);
     }
 

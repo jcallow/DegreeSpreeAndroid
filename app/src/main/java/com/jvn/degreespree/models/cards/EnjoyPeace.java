@@ -1,13 +1,15 @@
 package com.jvn.degreespree.models.cards;
 
 import com.jvn.degreespree.R;
+import com.jvn.degreespree.models.ComputerPlayer;
 import com.jvn.degreespree.models.Player;
 import com.jvn.degreespree.models.Reward;
+import com.jvn.degreespree.models.RewardCallback;
 
 /**
  * Created by john on 11/1/15.
  */
-public class EnjoyPeace extends Card {
+public class EnjoyPeace extends Card implements RewardCallback{
 
     public EnjoyPeace() {
         cardName = "Enjoying the Peace";
@@ -27,14 +29,24 @@ public class EnjoyPeace extends Card {
 
     @Override
     protected void success(Reward reward) {
-        //TODO: open dialog
-        reward.add(0,1,0,0);
+        if (playedBy.isHuman()) {
+            controller.openRewardDialog(1, true, false, true, this, reward);
+        } else {
+            ((ComputerPlayer) playedBy).pickReward(1, true, false, true, reward);
+            playedBy.rewardPlayer(reward);
+            playedBy.endTurn();
+        }
+
+    }
+
+    @Override
+    protected void fail(Reward reward) {
         playedBy.rewardPlayer(reward);
         playedBy.endTurn();
     }
 
     @Override
-    protected void fail(Reward reward) {
+    public void rewardCallback(Reward reward) {
         playedBy.rewardPlayer(reward);
         playedBy.endTurn();
     }

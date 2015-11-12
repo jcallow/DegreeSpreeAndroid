@@ -61,4 +61,8 @@ public class ComputerPlayer extends Player {
         Card discard = cards.get(r.nextInt(cards.size()));
         discard(discard);
     }
+
+    public void pickReward(int points, boolean learningOn, boolean craftOn, boolean integrityOn, Reward reward) {
+
+    }
 }
