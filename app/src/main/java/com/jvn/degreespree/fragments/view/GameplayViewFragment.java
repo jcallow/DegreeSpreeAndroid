@@ -70,11 +70,11 @@ public class GameplayViewFragment extends Fragment {
     }
 
     private void initMoveList() {
-        movableLocations = new ArrayAdapter<BoardPosition>(controller.getApplicationContext(), android.R.layout.simple_list_item_1, android.R.id.text1, new ArrayList<BoardPosition>());
+        movableLocations = new ArrayAdapter<BoardPosition>(controller.getApplicationContext(), R.layout.list_item_black, new ArrayList<BoardPosition>());
     }
 
     private void initTurnsTaken() {
-        turnsTaken = new ArrayAdapter<TurnInfo>(controller.getApplicationContext(), android.R.layout.simple_list_item_1, android.R.id.text1, new ArrayList<TurnInfo>());
+        turnsTaken = new ArrayAdapter<TurnInfo>(controller.getApplicationContext(), R.layout.turn_info_item, new ArrayList<TurnInfo>());
     }
 
     @Override
@@ -202,6 +202,7 @@ public class GameplayViewFragment extends Fragment {
 
     private void initTurnsInfo(View v) {
         mTurnsTaken = (ListView) v.findViewById(R.id.turns_info);
+        mTurnsTaken.setTranscriptMode(ListView.TRANSCRIPT_MODE_ALWAYS_SCROLL);
         mTurnsTaken.setAdapter(turnsTaken);
     }
 
@@ -279,6 +280,7 @@ public class GameplayViewFragment extends Fragment {
 
     public void addTurnInfo(TurnInfo info) {
         turnsTaken.add(info);
+
     }
 
     public void updatePlayerInfo(Player player) {
