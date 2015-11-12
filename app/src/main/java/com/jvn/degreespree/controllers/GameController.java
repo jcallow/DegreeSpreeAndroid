@@ -201,7 +201,7 @@ public class GameController {
             menuView.updateCardDisplay(currentPlayersTurn.getCardInHand());
         }
     }
-    
+
     public void placeInDiscardPile(Card card) {
         deck.discard(card);
         updateScores();
