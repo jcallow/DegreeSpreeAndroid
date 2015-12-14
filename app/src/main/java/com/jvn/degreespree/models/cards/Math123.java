@@ -5,6 +5,7 @@ import com.jvn.degreespree.models.ComputerPlayer;
 import com.jvn.degreespree.models.DiscardCallback;
 import com.jvn.degreespree.models.Player;
 import com.jvn.degreespree.models.Reward;
+import com.jvn.degreespree.models.Year;
 
 /**
  * Created by john on 11/1/15.
@@ -14,6 +15,7 @@ public class Math123 extends Card implements DiscardCallback {
     public Math123() {
         cardName = "Math 123";
         imageRef = R.drawable.math123;
+        year = Year.Freshman;
     }
 
     @Override

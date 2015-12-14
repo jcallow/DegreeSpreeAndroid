@@ -22,6 +22,7 @@ import com.jvn.degreespree.models.BoardPosition;
 import com.jvn.degreespree.models.Deck;
 import com.jvn.degreespree.models.Player;
 import com.jvn.degreespree.models.TurnInfo;
+import com.jvn.degreespree.models.Year;
 import com.jvn.degreespree.models.cards.Card;
 import com.jvn.degreespree.widgets.StatsRow;
 
@@ -45,6 +46,7 @@ public class GameplayViewFragment extends Fragment {
     private Integer currentCard = null;
     private TextView mCardsInDeck;
     private TextView mCardsOutPlay;
+    private TextView mYear;
 
     private BoardPosition currentlySelected = null;
 
@@ -194,6 +196,7 @@ public class GameplayViewFragment extends Fragment {
 
         mCardsInDeck = (TextView) v.findViewById(R.id.cards_in_deck);
         mCardsOutPlay = (TextView) v.findViewById(R.id.cards_out_play);
+        mYear = (TextView) v.findViewById(R.id.year);
 
         mPlayerInfo = (TextView) v.findViewById(R.id.current_player);
 
@@ -214,12 +217,19 @@ public class GameplayViewFragment extends Fragment {
     }
 
     public void updateCardDisplay(Card card) {
-        currentCard = card.getImageRef();
-        // safety check.  Card could be updated while out of context.  Have to do this because I goofed
-        // the way I built the view.
-        if (mCardView != null) {
-            mCardView.setImageResource(card.getImageRef());
+        if (card != null) {
+            currentCard = card.getImageRef();
+            // safety check.  Card could be updated while out of context.  Have to do this because I goofed
+            // the way I built the view.
+            if (mCardView != null) {
+                mCardView.setImageResource(card.getImageRef());
+            }
+        } else {
+            if (mCardView != null) {
+                mCardView.setImageResource(R.drawable.nocard);
+            }
         }
+
     }
 
     public void disableMove() {
@@ -259,7 +269,7 @@ public class GameplayViewFragment extends Fragment {
         disablePlayCard();
     }
 
-    public void updateScoreBoard(ArrayList<Player> players, Deck deck) {
+    public void updateScoreBoard(ArrayList<Player> players, Deck deck, Year year) {
         if (mPlayer1Score != null) {
             mPlayer1Score.update(players.get(0));
         }
@@ -276,6 +286,10 @@ public class GameplayViewFragment extends Fragment {
 
         if (mCardsOutPlay != null) {
             mCardsOutPlay.setText(deck.outPlay() + "");
+        }
+
+        if (mYear != null) {
+            mYear.setText("Year: " + year.toString());
         }
     }
 

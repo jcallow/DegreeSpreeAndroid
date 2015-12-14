@@ -9,31 +9,31 @@ import com.jvn.degreespree.models.RewardCallback;
 import com.jvn.degreespree.models.Year;
 
 /**
- * Created by john on 11/11/15.
+ * Created by john on 12/13/15.
  */
-public class ElectiveClass extends Card implements RewardCallback {
+public class PHYS152 extends Card implements DiscardCallback, RewardCallback {
 
-    public ElectiveClass() {
-        cardName = "Elective Class";
-        imageRef = R.drawable.electiveclass;
-        year = Year.Freshman;
+    public PHYS152() {
+        cardName = "PHYS 152";
+        imageRef = R.drawable.phys152;
+        year = Year.Sophomore;
     }
 
     @Override
     protected boolean correctPosition(Player player) {
         int position = player.getBoardPosition().getIndex();
-        return (position == 7);
+        return (position == 7 || position == 8);
     }
 
     @Override
     protected boolean meetsRequirements(Player player) {
-        if (player.getLearning() >= 2) return true;
+        if (player.getIntegrity() >= 7) return true;
         return false;
     }
 
     @Override
     protected void success(Reward reward) {
-        controller.drawCard();
+        reward.add(0, 0, 0, 5);
         if (playedBy.isHuman()) {
             controller.openRewardDialog(1, true, true, true, this, reward);
         } else {
@@ -46,8 +46,18 @@ public class ElectiveClass extends Card implements RewardCallback {
 
     @Override
     protected void fail(Reward reward) {
-        reward.add(0,0,0,-2);
         playedBy.rewardPlayer(reward);
+        if (playedBy.isHuman()) {
+            controller.openDiscardDialog(playedBy, this);
+        } else {
+            ComputerPlayer cpu = (ComputerPlayer) playedBy;
+            cpu.chooseDiscard();
+            discardCallback();
+        }
+    }
+
+    @Override
+    public void discardCallback() {
         playedBy.endTurn();
     }
 
@@ -57,3 +67,4 @@ public class ElectiveClass extends Card implements RewardCallback {
         playedBy.endTurn();
     }
 }
+

@@ -3,6 +3,7 @@ package com.jvn.degreespree.models.cards;
 import com.jvn.degreespree.R;
 import com.jvn.degreespree.models.Player;
 import com.jvn.degreespree.models.Reward;
+import com.jvn.degreespree.models.Year;
 
 /**
  * Created by john on 11/1/15.
@@ -12,6 +13,7 @@ public class Phys151 extends Card {
     public Phys151() {
         cardName = "Physics 151";
         imageRef = R.drawable.phys151;
+        year = Year.Freshman;
     }
 
     @Override

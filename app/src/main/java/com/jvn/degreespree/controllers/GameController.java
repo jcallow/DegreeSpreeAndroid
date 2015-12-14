@@ -1,11 +1,9 @@
 package com.jvn.degreespree.controllers;
 
 import android.content.Context;
-import android.support.v7.app.AlertDialog;
 import android.util.Log;
 
 import com.jvn.degreespree.MainView;
-import com.jvn.degreespree.R;
 import com.jvn.degreespree.Utils.ScreenUtils;
 import com.jvn.degreespree.fragments.view.BoardViewFragment;
 import com.jvn.degreespree.fragments.view.GameplayViewFragment;
@@ -18,12 +16,10 @@ import com.jvn.degreespree.models.DiscardCallback;
 import com.jvn.degreespree.models.Reward;
 import com.jvn.degreespree.models.RewardCallback;
 import com.jvn.degreespree.models.TurnInfo;
-import com.jvn.degreespree.models.cards.CECS105;
+import com.jvn.degreespree.models.Year;
 import com.jvn.degreespree.models.cards.Card;
-import com.jvn.degreespree.models.ComputerPlayer;
 import com.jvn.degreespree.models.GameBoard;
 import com.jvn.degreespree.models.GameSettings;
-import com.jvn.degreespree.models.HumanPlayer;
 import com.jvn.degreespree.models.Player;
 
 import java.util.ArrayList;
@@ -48,6 +44,7 @@ public class GameController {
     private Deck deck;
     private DiscardDialog discardDialog;
     private RewardDialog rewardDialog;
+    private Year currentYear;  // its the current year man
 
     public GameController(MainView mainView) {
         this.mainView = mainView;
@@ -87,6 +84,7 @@ public class GameController {
     public void startGame() {
 
         // Switch to Start view eventually
+        currentYear = Year.Freshman;
 
         gameSettings = new GameSettings();
         players = gameSettings.getPlayers();
@@ -137,6 +135,7 @@ public class GameController {
 
     public void nextTurn() {
         updateScores();
+        updateYear();
         if (!gameHasEnded()) {
             currentPlayerIndex = (currentPlayerIndex + 1) % 3;
             Player nextPlayer = players.get(currentPlayerIndex);
@@ -204,8 +203,12 @@ public class GameController {
     }
 
     public void placeInDiscardPile(Card card) {
+        if (currentPlayersTurn.isHuman()) {
+            menuView.updateCardDisplay(currentPlayersTurn.getCardInHand());
+        }
         deck.discard(card);
         updateScores();
+
     }
 
     public void addTurnInfo(TurnInfo info) {
@@ -225,8 +228,28 @@ public class GameController {
 
     }
 
+    private void updateYear() {
+        int totalQP = 0;
+        for (Player player : players) {
+            totalQP += player.getQualityPoints();
+        }
+
+        if (currentYear == Year.Freshman && totalQP >= 60) {
+            currentYear = Year.Sophomore;
+            for (Player player : players) {
+                player.discardAll();
+            }
+            deck.setYear(Year.Sophomore);
+
+            for (Player player : players) {
+                player.addToHand(deck.take(5));
+            }
+
+        }
+    }
+
     public void updateScores() {
-        menuView.updateScoreBoard(players, deck);
+        menuView.updateScoreBoard(players, deck, currentYear);
 
     }
 
@@ -240,8 +263,12 @@ public class GameController {
     }
 
     public void openDiscardDialog(Player player, DiscardCallback callback) {
-        discardDialog.setPlayer(player, callback);
-        mainView.showDiag(discardDialog);
+        if (player.hasCards()) {
+            discardDialog.setPlayer(player, callback);
+            mainView.showDiag(discardDialog);
+        } else {
+            callback.discardCallback();
+        }
     }
 
     public GameBoard getGameBoard() {

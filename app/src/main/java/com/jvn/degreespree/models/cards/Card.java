@@ -7,6 +7,7 @@ import android.media.Image;
 import com.jvn.degreespree.controllers.GameController;
 import com.jvn.degreespree.models.Player;
 import com.jvn.degreespree.models.Reward;
+import com.jvn.degreespree.models.Year;
 
 /**
  * Created by john on 10/10/15.
@@ -16,6 +17,7 @@ public abstract class Card {
     protected String cardName = "card";
     protected GameController controller;
     protected Player playedBy;
+    protected Year year = Year.All;
 
     public void bind(GameController controller) {
         this.controller = controller;
@@ -23,6 +25,10 @@ public abstract class Card {
 
     public Integer getImageRef() {
         return imageRef;
+    }
+
+    public Year getYear() {
+        return year;
     }
 
     @Override
@@ -44,6 +50,10 @@ public abstract class Card {
         } else if (!correctPos && !metRequirements) {
             fail(new Reward(0,0,0,0,false,false));
         }
+    }
+
+    public boolean check(Player player) {
+        return (correctPosition(player) && meetsRequirements(player));
     }
 
     abstract protected boolean correctPosition(Player player);

@@ -6,21 +6,19 @@ import com.jvn.degreespree.models.Reward;
 import com.jvn.degreespree.models.Year;
 
 /**
- * Created by john on 11/1/15.
+ * Created by john on 12/13/15.
  */
-public class CECS100 extends Card {
+public class DoNothing extends Card {
 
-    public CECS100() {
-
-        cardName = "CECS 100";
-        imageRef = R.drawable.cecs100;
-        year = Year.Freshman;
+    public DoNothing() {
+        cardName = "Do Nothing";
+        imageRef = R.drawable.donothing;
+        year = Year.Sophomore;
     }
 
     @Override
     protected boolean correctPosition(Player player) {
-        int position = player.getBoardPosition().getIndex();
-        return (position == 17);
+        return true;
     }
 
     @Override
@@ -30,14 +28,13 @@ public class CECS100 extends Card {
 
     @Override
     protected void success(Reward reward) {
-        reward.add(0,1,0,0);
-        playedBy.rewardPlayer(reward);
         playedBy.endTurn();
+
     }
 
     @Override
     protected void fail(Reward reward) {
-        playedBy.rewardPlayer(reward);
         playedBy.endTurn();
+
     }
 }

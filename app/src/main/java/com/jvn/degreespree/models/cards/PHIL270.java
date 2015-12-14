@@ -1,48 +1,36 @@
 package com.jvn.degreespree.models.cards;
 
-/**
- * Created by john on 11/1/15.
- */
-import android.util.Log;
-
 import com.jvn.degreespree.R;
-import com.jvn.degreespree.models.BoardPosition;
 import com.jvn.degreespree.models.Player;
 import com.jvn.degreespree.models.Reward;
 import com.jvn.degreespree.models.Year;
 
 /**
- * Created by john on 11/1/15.
+ * Created by john on 12/13/15.
  */
-public class Kin253 extends Card {
+public class PHIL270 extends Card {
 
-    public Kin253() {
-        cardName = "KIN 253";
-        imageRef = R.drawable.kin253;
-        year = Year.Freshman;
-    }
-
-    private void fail(Player player) {
-        BoardPosition position = controller.getGameBoard().getPosition(13);
-        controller.movePlayer(position);
-        player.endTurn();
+    public PHIL270() {
+        cardName = "PHIL 270";
+        imageRef = R.drawable.phil270;
+        year = Year.Sophomore;
     }
 
     @Override
     protected boolean correctPosition(Player player) {
         int position = player.getBoardPosition().getIndex();
-        return (position == 0);
+        return (position == 7 || position == 8);
     }
 
     @Override
     protected boolean meetsRequirements(Player player) {
-        if (player.getIntegrity() >= 4) return true;
-        else return false;
+        if (player.getIntegrity() >= 7) return true;
+        return false;
     }
 
     @Override
     protected void success(Reward reward) {
-        reward.add(0,2,0,0);
+        reward.add(1, 0, 0, 3);
         playedBy.rewardPlayer(reward);
         playedBy.endTurn();
     }
@@ -53,3 +41,4 @@ public class Kin253 extends Card {
         playedBy.endTurn();
     }
 }
+

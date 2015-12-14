@@ -38,7 +38,7 @@ abstract public class Player {
     }
 
     protected void initializePoints() {
-        for (int i = 0; i < 6; i++) {
+        for (int i = 0; i < 12; i++) {
             int rand = r.nextInt(3);
 
             if (rand == 0) learning++;
@@ -110,6 +110,7 @@ abstract public class Player {
     }
 
     public void playCardInHand() {
+        Log.d("Player", "Played: " + cardInHand.toString());
         turnCard = cardInHand;
         gameController.placeInDiscardPile(cardInHand);
         cards.remove(cardInHand);
@@ -163,13 +164,20 @@ abstract public class Player {
 
     public void discard(Card card) {
         cards.remove(card);
-        gameController.placeInDiscardPile(card);
-
         if (cards.size() > 0) {
             cardInHand = cards.get(0);
         } else {
             cardInHand = null;
         }
+        gameController.placeInDiscardPile(card);
+
+    }
+
+    public void discardAll() {
+        for (Card card : cards) {
+            gameController.placeInDiscardPile(card);
+        }
+        cards.clear();
     }
 
     public void rewardPlayer(Reward reward) {
@@ -184,10 +192,17 @@ abstract public class Player {
         integrity += reward.getIntegrity();
         craft += reward.getCraft();
         qualityPoints += reward.getQualityPoints();
+
+        if (qualityPoints < 0)
+            qualityPoints = 0;
     }
 
     public ArrayList<Card> getCards() {
         return cards;
+    }
+
+    public boolean hasCards() {
+        return (cards.size() > 0);
     }
 
 }

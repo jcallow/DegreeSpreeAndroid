@@ -2,38 +2,37 @@ package com.jvn.degreespree.models.cards;
 
 import com.jvn.degreespree.R;
 import com.jvn.degreespree.models.ComputerPlayer;
-import com.jvn.degreespree.models.DiscardCallback;
 import com.jvn.degreespree.models.Player;
 import com.jvn.degreespree.models.Reward;
 import com.jvn.degreespree.models.RewardCallback;
 import com.jvn.degreespree.models.Year;
 
 /**
- * Created by john on 11/11/15.
+ * Created by john on 12/13/15.
  */
-public class ElectiveClass extends Card implements RewardCallback {
+public class CECS285 extends Card implements RewardCallback {
 
-    public ElectiveClass() {
-        cardName = "Elective Class";
-        imageRef = R.drawable.electiveclass;
-        year = Year.Freshman;
+    public CECS285() {
+        cardName = "CECS285";
+        imageRef = R.drawable.cecs285;
+        year = Year.Sophomore;
     }
 
     @Override
     protected boolean correctPosition(Player player) {
         int position = player.getBoardPosition().getIndex();
-        return (position == 7);
+        return (position == 1 || position == 18);
     }
 
     @Override
     protected boolean meetsRequirements(Player player) {
-        if (player.getLearning() >= 2) return true;
+        if (player.getLearning() >= 6) return true;
         return false;
     }
 
     @Override
     protected void success(Reward reward) {
-        controller.drawCard();
+        reward.add(0, 0, 0, 5);
         if (playedBy.isHuman()) {
             controller.openRewardDialog(1, true, true, true, this, reward);
         } else {
@@ -46,10 +45,11 @@ public class ElectiveClass extends Card implements RewardCallback {
 
     @Override
     protected void fail(Reward reward) {
-        reward.add(0,0,0,-2);
+        reward.add(0,0,0,-3);
         playedBy.rewardPlayer(reward);
         playedBy.endTurn();
     }
+
 
     @Override
     public void rewardCallback(Reward reward) {
@@ -57,3 +57,4 @@ public class ElectiveClass extends Card implements RewardCallback {
         playedBy.endTurn();
     }
 }
+

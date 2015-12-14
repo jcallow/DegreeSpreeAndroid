@@ -218,7 +218,7 @@
                     <TextView
                         android:id="@+id/cards_in_deck"
                         android:text="35"
-                        android:layout_width="80dp"
+                        android:layout_width="25dp"
                         android:layout_height="match_parent"/>
 
                     <TextView
@@ -229,7 +229,13 @@
                     <TextView
                         android:id="@+id/cards_out_play"
                         android:text=""
-                        android:layout_width="80dp"
+                        android:layout_width="25dp"
+                        android:layout_height="match_parent"/>
+
+                    <TextView
+                        android:id="@+id/year"
+                        android:text=""
+                        android:layout_width="140dp"
                         android:layout_height="match_parent"/>
 
                 </LinearLayout>

@@ -1,46 +1,47 @@
 package com.jvn.degreespree.models.cards;
 
 import com.jvn.degreespree.R;
-import com.jvn.degreespree.models.BoardPosition;
 import com.jvn.degreespree.models.Player;
 import com.jvn.degreespree.models.Reward;
 import com.jvn.degreespree.models.Year;
 
-/**
- * Created by john on 11/11/15.
- */
-public class Chem111 extends Card {
+import java.util.Random;
 
-    public Chem111() {
-        cardName = "Chem 111";
-        imageRef = R.drawable.chem111;
-        year = Year.Freshman;
+/**
+ * Created by john on 12/13/15.
+ */
+public class Mystery extends Card {
+
+    public Mystery() {
+        cardName = "Mystery";
+        imageRef = R.drawable.mystery;
+        year = Year.Sophomore;
     }
 
     @Override
     protected boolean correctPosition(Player player) {
-        int position = player.getBoardPosition().getIndex();
-        return (position < 11);
+        return true;
     }
 
     @Override
     protected boolean meetsRequirements(Player player) {
-        if (player.getCraft() >= 6) return true;
-        return false;
+        return true;
     }
 
     @Override
     protected void success(Reward reward) {
-        reward.add(0,0,0,5);
+        Random r = new Random();
+        reward.add(r.nextInt(10), r.nextInt(10), r.nextInt(10), r.nextInt(10));
         playedBy.rewardPlayer(reward);
         playedBy.endTurn();
+
     }
 
     @Override
     protected void fail(Reward reward) {
-        BoardPosition position = controller.getGameBoard().getPosition(2);
-        controller.movePlayer(position);
+        reward.add(0,0,0,0);
         playedBy.rewardPlayer(reward);
         playedBy.endTurn();
+
     }
 }

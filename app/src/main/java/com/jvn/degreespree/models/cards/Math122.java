@@ -5,6 +5,7 @@ import com.jvn.degreespree.models.ComputerPlayer;
 import com.jvn.degreespree.models.Player;
 import com.jvn.degreespree.models.Reward;
 import com.jvn.degreespree.models.RewardCallback;
+import com.jvn.degreespree.models.Year;
 
 /**
  * Created by john on 11/1/15.
@@ -14,6 +15,7 @@ public class Math122 extends Card implements RewardCallback{
     public Math122() {
         cardName = "Math 122";
         imageRef = R.drawable.math122;
+        year = Year.Freshman;
     }
 
     @Override

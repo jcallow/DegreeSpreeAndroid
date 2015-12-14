@@ -5,47 +5,42 @@ import com.jvn.degreespree.models.ComputerPlayer;
 import com.jvn.degreespree.models.DiscardCallback;
 import com.jvn.degreespree.models.Player;
 import com.jvn.degreespree.models.Reward;
-import com.jvn.degreespree.models.RewardCallback;
 import com.jvn.degreespree.models.Year;
 
 /**
- * Created by john on 11/11/15.
+ * Created by john on 12/13/15.
  */
-public class OralCommunication extends Card implements DiscardCallback, RewardCallback {
+public class CECS277 extends Card implements DiscardCallback {
 
-    public OralCommunication() {
-        cardName = "Oral Communication";
-        imageRef = R.drawable.oralcommunication;
-        year = Year.Freshman;
+    public CECS277() {
+        cardName = "CECS277";
+        imageRef = R.drawable.cecs277;
+        year = Year.Sophomore;
     }
 
     @Override
     protected boolean correctPosition(Player player) {
         int position = player.getBoardPosition().getIndex();
-        return (position < 11);
+        return (position >= 11);
     }
 
     @Override
     protected boolean meetsRequirements(Player player) {
-        if (player.getIntegrity() >= 4) return true;
+        if (player.getCraft() >= 8 && player.getIntegrity() >= 8 && player.getLearning() >= 8) return true;
         return false;
     }
 
     @Override
     protected void success(Reward reward) {
-        reward.add(0, 0, 0, 4);
-        if (playedBy.isHuman()) {
-            controller.openRewardDialog(1, true, true, true, this, reward);
-        } else {
-            ((ComputerPlayer) playedBy).pickReward(1, true, true, true, reward);
-            playedBy.rewardPlayer(reward);
-            playedBy.endTurn();
-        }
+        reward.add(0, 0, 0, 5);
+        playedBy.rewardPlayer(reward);
+        playedBy.endTurn();
 
     }
 
     @Override
     protected void fail(Reward reward) {
+        reward.add(0,0,0,-2);
         playedBy.rewardPlayer(reward);
         if (playedBy.isHuman()) {
             controller.openDiscardDialog(playedBy, this);
@@ -61,9 +56,6 @@ public class OralCommunication extends Card implements DiscardCallback, RewardCa
         playedBy.endTurn();
     }
 
-    @Override
-    public void rewardCallback(Reward reward) {
-        playedBy.rewardPlayer(reward);
-        playedBy.endTurn();
-    }
+
 }
+
